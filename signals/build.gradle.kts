@@ -84,8 +84,20 @@ kotlin {
                 implementation(Libs.stately)
             }
         }
+        val jvmTest by getting {
+            dependencies {
+                implementation(TestLibs.coro)
+                implementation(Libs.concurrency)
+            }
+        }
         val jsMain by getting
+        val jsTest by getting
         val nativeMain by getting
+        val nativeTest by getting {
+            dependencies {
+                implementation(TestLibs.coro)
+            }
+        }
     }
 }
 

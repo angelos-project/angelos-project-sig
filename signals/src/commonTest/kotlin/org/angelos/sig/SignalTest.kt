@@ -1,7 +1,6 @@
 package org.angelos.sig
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 /**
  * Signal implementation for testing
@@ -15,15 +14,17 @@ class SignalImpl : Signal
  *
  * @constructor Create empty Signal test
  */
-class SignalTest {
+expect class SignalTest {
 
     /**
      * Register handler test.
      */
     @Test
-    fun registerHandler() {
-        val signal = SignalImpl()
-        signal.registerHandler(SigName.SIGIO) { println("Hello signal $it") }
-        assertFailsWith<SignalException> { signal.registerHandler(SigName.SIGKILL) { println("Hello signal $it") } }
-    }
+    fun registerHandler()
+
+    /**
+     * Catch signal test.
+     */
+    @Test
+    fun catchInterrupt()
 }

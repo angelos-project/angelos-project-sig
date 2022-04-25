@@ -31,6 +31,7 @@ object Libs {
 
     const val coro = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coro}-native-mt"
     const val stately = "co.touchlab:stately-common:${Versions.stately}"
+    const val concurrency = "co.touchlab:stately-concurrency:${Versions.stately}"
     const val collections = "co.touchlab:stately-iso-collections:${Versions.stately}"
 }
 
