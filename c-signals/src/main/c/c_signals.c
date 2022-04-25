@@ -19,6 +19,8 @@
 
 #include "c_signals.h"
 
+const char* empty = "";
+
 const char* signal_abbr(int signum) {
 #if defined (__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__APPLE__)
     const char* abbr = sys_signame[signum % NSIG];
@@ -27,6 +29,8 @@ const char* signal_abbr(int signum) {
 #elif defined (_WIN32) || defined (_WIN64)
     return
 #endif
-    printf("%s", abbr);
-    return abbr;
+    if(abbr == NULL)
+        return abbr;
+    else
+        return empty;
 }

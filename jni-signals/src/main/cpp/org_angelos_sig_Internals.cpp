@@ -31,10 +31,7 @@ static const char *JNIT_CLASS = "org/angelos/sig/Internals";
  */
 static jstring get_signal_abbreviation(JNIEnv *env, jclass thisClass, jint signum) {
     const char* abbr = signal_abbr(signum);
-    if(abbr == NULL)
-        return (*env)->NewStringUTF(env, "");
-    else
-        return (*env)->NewStringUTF(env, abbr);
+    return (*env)->NewStringUTF(env, abbr);
 }
 
 static JNINativeMethod funcs[] = {
