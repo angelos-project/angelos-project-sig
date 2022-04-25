@@ -14,10 +14,12 @@
  */
 
 #include <signal.h>
-#include <string.h>
-#include <stdio.h>
 
 #include "c_signals.h"
+
+#if defined (__linux__)
+extern const char * const sys_sigabbrev[];
+#endif
 
 const char* empty = "";
 
@@ -25,12 +27,9 @@ const char* signal_abbr(int signum) {
 #if defined (__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__APPLE__)
     const char* abbr = sys_signame[signum % NSIG];
 #elif defined (__linux__)
-    const char* abbr = sigabbrev_np(signum);
+    const char* abbr = sys_sigabbrev[signum % 32];
 #elif defined (_WIN32) || defined (_WIN64)
     return
 #endif
-    if(abbr == NULL)
-        return abbr;
-    else
-        return empty;
+    return abbr ? abbr : empty;
 }

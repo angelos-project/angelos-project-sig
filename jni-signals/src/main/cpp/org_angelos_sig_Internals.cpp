@@ -30,7 +30,7 @@ static const char *JNIT_CLASS = "org/angelos/sig/Internals";
  * Signature: (I)Ljava/lang/String;
  */
 static jstring get_signal_abbreviation(JNIEnv *env, jclass thisClass, jint signum) {
-    const char* abbr = signal_abbr(signum);
+    char* abbr = signal_abbr(signum);
     return (*env)->NewStringUTF(env, abbr);
 }
 
