@@ -42,3 +42,7 @@ library {
         }
     }
 }
+
+dependencies {
+    implementation(project(":c-signals"))
+}

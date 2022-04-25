@@ -14,9 +14,7 @@
  */
 #include <jni.h>
 
-//#if defined (__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__APPLE__)
-    #include <signal.h>
-//#endif
+#include "c_signals.h"
 
 #ifndef _Included_org_angelos_sig_Internals
 #define _Included_org_angelos_sig_Internals
@@ -32,10 +30,11 @@ static const char *JNIT_CLASS = "org/angelos/sig/Internals";
  * Signature: (I)Ljava/lang/String;
  */
 static jstring get_signal_abbreviation(JNIEnv *env, jclass thisClass, jint signum) {
-    //#if defined (__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__APPLE__)
-        const char* abbr = sys_signame[signum % NSIG];
-    //#endif
-    return (*env)->NewStringUTF(env, abbr);
+    const char* abbr = signal_abbr(signum);
+    if(abbr == NULL)
+        return (*env)->NewStringUTF(env, "");
+    else
+        return (*env)->NewStringUTF(env, abbr);
 }
 
 static JNINativeMethod funcs[] = {

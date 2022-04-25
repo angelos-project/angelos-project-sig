@@ -12,7 +12,6 @@ class SigNameTest {
 
     /**
      * Test for SigName.codeToName()
-     *
      */
     @Test
     fun codeToName() {

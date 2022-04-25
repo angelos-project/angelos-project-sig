@@ -60,6 +60,22 @@ kotlin {
         isMingwX64 -> mingwX64("native")
         else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
     }
+
+    nativeTarget.apply {
+        val includePath = file("${project(":c-signals").projectDir}/src/main/public/").absolutePath
+        val libraryPathMain = file(project.file("${project(":c-signals").buildDir}/lib/main/release/")).absolutePath
+        val libraryPathTest = file(project.file("${project(":c-signals").buildDir}/lib/main/debug/")).absolutePath
+
+        val main by compilations.getting
+
+        val c_signals by main.cinterops.creating {
+            defFile(project.file("src/nativeInterop/cinterop/c-signals.def"))
+            compilerOpts("-I$includePath")
+            includeDirs.allHeaders(includePath)
+            extraOpts("-libraryPath", "$libraryPathMain")
+            extraOpts("-libraryPath", "$libraryPathTest")
+        }
+    }
     
     sourceSets {
         val commonMain by getting {
@@ -99,6 +115,10 @@ kotlin {
             }
         }
     }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.CInteropProcess::class) {
+    dependsOn(":c-signals:assemble")
 }
 
 tasks.dokkaHtml.configure {

@@ -1,0 +1,3 @@
+headers = c_signals.h
+staticLibraries = libc-signals.a
+package = csignals

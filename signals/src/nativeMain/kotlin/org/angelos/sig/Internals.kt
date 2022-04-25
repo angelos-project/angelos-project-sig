@@ -15,10 +15,9 @@
 package org.angelos.sig
 
 import kotlinx.cinterop.*
-import platform.posix.NSIG
 import platform.posix.SIG_ERR
 import platform.posix.signal
-import platform.posix.sys_signame
+import csignals.signal_abbr
 
 internal actual sealed class Internals {
     actual companion object {
@@ -31,7 +30,7 @@ internal actual sealed class Internals {
         }
 
         actual inline fun sigAbbr(sigNum: Int): String = memScoped {
-            sys_signame[sigNum % NSIG]!!.toKString().uppercase()
+            signal_abbr(sigNum)!!.toKString().uppercase()
         }
     }
 }
