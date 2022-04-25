@@ -14,4 +14,7 @@
  */
 package org.angelos.sig
 
+/**
+ * Typealias defining a signal handler lambda function.
+ */
 typealias SignalHandler = suspend (it: SigName) -> (Unit)

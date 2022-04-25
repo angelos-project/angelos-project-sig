@@ -3,8 +3,17 @@ package org.angelos.sig
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+/**
+ * Signal name test class.
+ *
+ * @constructor Create empty Sig name test
+ */
 class SigNameTest {
 
+    /**
+     * Test for SigName.codeToName()
+     *
+     */
     @Test
     fun codeToName() {
         assertEquals(SigName.codeToName(6), SigName.SIGABRT)
@@ -21,6 +30,9 @@ class SigNameTest {
         assertEquals(SigName.codeToName(5), SigName.SIGTRAP)
     }
 
+    /**
+     * Test for SigName.nameToCode()
+     */
     @Test
     fun nameToCode() {
         assertEquals(SigName.nameToCode(SigName.SIGABRT), 6)

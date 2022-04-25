@@ -21,7 +21,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
+/**
+ * Signal interface, can be implemented on any object or class.
+ * Implements all necessary functionality.
+ *
+ * @constructor Create empty Signal
+ */
 interface Signal {
+
+    /**
+     * Register handler in a certain POSIX signal.
+     *
+     * @param sig Signal name to handle
+     * @param action Lambda dealing with the incoming signal
+     */
     fun registerHandler(sig: SigName, action: SignalHandler) {
         when(Internals.setInterrupt(sig)) {
             true -> when(sig in signals) {

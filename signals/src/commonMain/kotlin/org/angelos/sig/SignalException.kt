@@ -14,4 +14,11 @@
  */
 package org.angelos.sig
 
+/**
+ * Signal exception is thrown any time there is problem with signals.
+ *
+ * @constructor
+ *
+ * @param message Error message
+ */
 class SignalException(message: String) : RuntimeException(message)

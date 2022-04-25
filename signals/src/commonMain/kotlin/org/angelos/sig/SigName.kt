@@ -14,6 +14,17 @@
  */
 package org.angelos.sig
 
+/**
+ * All the POSIX signal names supported in this package.
+ *
+ * It is important to understand that all signals implemented doesn't represent all signals available.
+ * Also, not every signal mentioned may not be supported by the underlying operating system.
+ *
+ * At software initialization all the signals up to 32 are probed against the OS.
+ *
+ * @property sigName
+ * @constructor Create empty Sig name
+ */
 enum class SigName(val sigName: String){
     SIGABRT("ABRT"), // Process abort signal
     SIGALRM("ALRM"), // Alarm clock
@@ -49,7 +60,11 @@ enum class SigName(val sigName: String){
 
     UNKNOWN("UNKNOWN"); // Dummy for unauthorized use.
 
-
+    /**
+     * SigName as a representable string.
+     *
+     * @return Full signal name
+     */
     override fun toString(): String = "SIG$sigName"
 
     companion object {
@@ -67,9 +82,34 @@ enum class SigName(val sigName: String){
             }
         }
 
+        /**
+         * Convert a signal number to its equivalent signal name, throws SignalException if not supported.
+         *
+         * @param sigNum Signal number
+         * @return Signal name
+         */
         fun codeToName(sigNum: Int): SigName = numCache[sigNum] ?: throw SignalException("Unsupported signal number: $sigNum")
+
+        /**
+         * Convert signal name to its equivalent signal number, throws SignalException if not supported.
+         *
+         * @param sigName Signal name
+         * @return Signal number
+         */
         fun nameToCode(sigName: SigName): Int = nameCache[sigName] ?: throw SignalException("Unsupported signal: $sigName")
+
+        /**
+         * Check if signal number is implemented.
+         *
+         * @param sigNum Implemented or not
+         */
         fun isImplemented(sigNum: Int) = numCache.containsKey(sigNum)
+
+        /**
+         * Check if signal name is implemented.
+         *
+         * @param sigName Implemented or not
+         */
         fun isImplemented(sigName: SigName) = nameCache.containsKey(sigName)
     }
 }
