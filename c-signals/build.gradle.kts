@@ -32,7 +32,7 @@ library {
         })
         when(toolChain) {
             is VisualCpp -> throw IllegalStateException("Can not be used with VisualCPP, use MSYS2/Cygwin or similar.")
-            is Clang, is GccCompatibleToolChain -> compileTask.compilerArgs.addAll(listOf("-x", "c", "-std=c11"))
+            is Clang, is GccCompatibleToolChain -> compileTask.compilerArgs.addAll(listOf("-x", "c", "-std=c11", "-fPIC"))
         }
     }
 }
