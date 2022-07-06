@@ -12,8 +12,9 @@
  * Contributors:
  *      Kristoffer Paulsson - initial implementation
  */
-rootProject.name = "angelos-project-sig"
+package org.angproj.io.sig
 
-include(":c-signals")
-include(":jni-signals")
-include(":signals")
+/**
+ * Typealias defining a signal handler lambda function.
+ */
+typealias SignalHandler = suspend (it: SigName) -> (Unit)

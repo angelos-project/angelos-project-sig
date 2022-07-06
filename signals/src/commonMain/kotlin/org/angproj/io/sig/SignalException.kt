@@ -12,8 +12,13 @@
  * Contributors:
  *      Kristoffer Paulsson - initial implementation
  */
-rootProject.name = "angelos-project-sig"
+package org.angproj.io.sig
 
-include(":c-signals")
-include(":jni-signals")
-include(":signals")
+/**
+ * Signal exception is thrown any time there is problem with signals.
+ *
+ * @constructor
+ *
+ * @param message Error message
+ */
+class SignalException(message: String) : RuntimeException(message)

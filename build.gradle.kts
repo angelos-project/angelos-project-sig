@@ -13,11 +13,13 @@
  *      Kristoffer Paulsson - initial implementation
  */
 
-group = Project.name
-version = Project.version
+group = MetaProject.group
+version = MetaProject.version
 
 plugins {
-    id("org.jetbrains.dokka") version Versions.dokka
+    id("org.jetbrains.kotlinx.kover") version MetaProject.koverVersion
+    id("com.github.nbaztec.coveralls-jacoco") version MetaProject.coverallsVersion
+    id("project-publish-setup")
 }
 
 allprojects {
@@ -26,17 +28,23 @@ allprojects {
     }
 }
 
-
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${Versions.dokka}")
+        classpath(MetaProject.kotlinLibrary)
+        classpath(MetaProject.dokkaLibrary)
     }
 }
 
-tasks.dokkaHtmlMultiModule.configure {
-    outputDirectory.set(buildDir.resolve("dokkaCustomMultiModuleOutput"))
+coverallsJacoco {
+    reportPath = "$projectDir/build/reports/kover/report.xml"
+
+    reportSourceSets = listOf(
+        File("$projectDir/signals/src/commonMain/kotlin/"),
+        File("$projectDir/signals/src/jvmMain/kotlin/"),
+        File("$projectDir/signals/src/jsMain/kotlin/"),
+        File("$projectDir/signals/src/nativeMain/kotlin/"),
+    )
 }

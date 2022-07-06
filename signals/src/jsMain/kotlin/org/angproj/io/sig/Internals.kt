@@ -12,8 +12,16 @@
  * Contributors:
  *      Kristoffer Paulsson - initial implementation
  */
-rootProject.name = "angelos-project-sig"
+package org.angproj.io.sig
 
-include(":c-signals")
-include(":jni-signals")
-include(":signals")
+internal actual sealed class Internals {
+    actual companion object {
+        actual fun setInterrupt(sigName: SigName): Boolean {
+            TODO("Not yet implemented")
+        }
+
+        actual fun sigAbbr(sigNum: Int): String {
+            TODO("Not yet implemented")
+        }
+    }
+}

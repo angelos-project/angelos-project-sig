@@ -1,3 +1,4 @@
+
 .gradle
 **/build/
 !src/**/build/
@@ -175,4 +176,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-/kotlin_js_store
+kotlin-js-store/
+
+local.properties
+*.gpg

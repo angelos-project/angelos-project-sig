@@ -12,8 +12,11 @@
  * Contributors:
  *      Kristoffer Paulsson - initial implementation
  */
-rootProject.name = "angelos-project-sig"
+package org.angproj.io.sig
 
-include(":c-signals")
-include(":jni-signals")
-include(":signals")
+internal expect sealed class Internals {
+    companion object {
+        fun setInterrupt(sigName: SigName): Boolean
+        fun sigAbbr(sigNum: Int): String
+    }
+}

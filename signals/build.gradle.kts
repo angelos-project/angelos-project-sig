@@ -12,17 +12,26 @@
  * Contributors:
  *      Kristoffer Paulsson - initial implementation
  */
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
+    id("module-publish-setup")
 }
-
-group = Project.name
-version = Project.version
 
 repositories {
     mavenCentral()
+}
+
+tasks {
+    dokkaHtml {
+        dokkaSourceSets {}
+        outputDirectory.set(buildDir.resolve("dokka"))
+    }
+    create<Jar>("javadocJar") {
+        dependsOn(dokkaHtml)
+        archiveClassifier.set("javadoc")
+        from(dokkaHtml.get().outputDirectory.get())
+    }
 }
 
 kotlin {
@@ -33,24 +42,22 @@ kotlin {
             dependsOn(":jni-signals:assemble")
             from("${project(":jni-signals").buildDir}/lib/main/release/stripped")
         }
+
         compilations.all {
             kotlinOptions.jvmTarget = "1.8"
         }
         withJava()
         testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
+            useJUnit()
             systemProperty(
                 "java.library.path",
                 file("${buildDir}/processedResources/jvm/main").absolutePath
             )
         }
     }
-    js(BOTH) {
-        browser {
-            commonWebpackConfig {
-                cssSupport.enabled = true
-            }
-        }
+    js(IR) {
+        moduleName = MetaProject.artifact
+        nodejs()
     }
     val hostOs = System.getProperty("os.name")
     val isMingwX64 = hostOs.startsWith("Windows")
@@ -68,7 +75,7 @@ kotlin {
 
         val main by compilations.getting
 
-        val c_signals by main.cinterops.creating {
+        val cbuffer by main.cinterops.creating {
             defFile(project.file("src/nativeInterop/cinterop/c-signals.def"))
             compilerOpts("-I$includePath")
             includeDirs.allHeaders(includePath)
@@ -76,56 +83,31 @@ kotlin {
             extraOpts("-libraryPath", "$libraryPathTest")
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
-            dependencies{
-                implementation(Libs.coro) {
+            dependencies {
+                implementation(MetaProject.coroLibrary) {
                     version {
-                        strictly("${Versions.coro}-native-mt")
+                        strictly(MetaProject.coroVersion)
                     }
                 }
-                implementation(Libs.stately)
-                implementation(Libs.collections)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(TestLibs.coro)
             }
         }
-        val jvmMain by getting {
-            dependencies {
-                implementation(Libs.stately)
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
-                implementation(TestLibs.coro)
-                implementation(Libs.concurrency)
-            }
-        }
+        val jvmMain by getting
+        val jvmTest by getting
         val jsMain by getting
         val jsTest by getting
         val nativeMain by getting
-        val nativeTest by getting {
-            dependencies {
-                implementation(TestLibs.coro)
-            }
-        }
+        val nativeTest by getting
     }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.CInteropProcess::class) {
     dependsOn(":c-signals:assemble")
-}
-
-tasks.dokkaHtml.configure {
-    outputDirectory.set(buildDir.resolve("dokka"))
-    dokkaSourceSets {
-        configureEach {
-            //includes.from("docs/doc.md")
-        }
-    }
 }

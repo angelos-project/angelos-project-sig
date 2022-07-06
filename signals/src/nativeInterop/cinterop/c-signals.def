@@ -1,3 +1,5 @@
 headers = c_signals.h
-staticLibraries = libc-signals.a
+staticLibraries.osx = libc-signals.a
+staticLibraries.linux = libc-signals.a
+staticLibraries.mingw = c-signals.lib
 package = csignals
