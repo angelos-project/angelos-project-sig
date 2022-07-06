@@ -17,11 +17,13 @@ package org.angproj.io.sig
 internal actual sealed class Internals {
     actual companion object {
         actual fun setInterrupt(sigName: SigName): Boolean {
-            TODO("Not yet implemented")
+            return false
+            // TODO("Not yet implemented")
         }
 
         actual fun sigAbbr(sigNum: Int): String {
-            TODO("Not yet implemented")
+            return "FAKE"
+            // TODO("Not yet implemented")
         }
     }
 }
