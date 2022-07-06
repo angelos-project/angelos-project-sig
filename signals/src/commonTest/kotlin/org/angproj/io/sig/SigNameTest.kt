@@ -33,6 +33,10 @@ fun t_nameToCode() {
     assertEquals(SigName.nameToCode(SigName.SIGTRAP), 5)
 }
 
+fun t_toString() {
+    assertEquals(SigName.SIGINT.toString(), "SIGINT")
+}
+
 /**
  * Signal name test class.
  *
@@ -51,4 +55,7 @@ expect class SigNameTest {
      */
     @Test
     fun nameToCode()
+
+    @Test
+    fun testToString()
 }

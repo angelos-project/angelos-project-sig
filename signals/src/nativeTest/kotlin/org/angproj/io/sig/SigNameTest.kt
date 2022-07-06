@@ -20,4 +20,8 @@ actual class SigNameTest {
         t_nameToCode()
     }
 
+    actual fun testToString() {
+        t_toString()
+    }
+
 }

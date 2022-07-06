@@ -18,4 +18,7 @@ actual class SigNameTest {
     actual fun nameToCode() {
     }
 
+    actual fun testToString() {
+    }
+
 }
