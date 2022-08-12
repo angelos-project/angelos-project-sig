@@ -13,6 +13,8 @@
  *      Kristoffer Paulsson - initial implementation
  */
 #include <jni.h>
+#include <signal.h>
+#include <stddef.h>
 
 #include "c_signals.h"
 
@@ -24,18 +26,61 @@ extern "C" {
 
 static const char *JNIT_CLASS = "org/angproj/io/sig/Internals";
 
+
+static JNIEnv * signal_jvm_env = NULL;
+static jclass local_signal_cls = NULL;
+static jclass global_signal_cls = NULL;
+static jmethodID signal_method = NULL;
+
+
+void sig_handler(int signum)
+{
+    (*signal_jvm_env)->CallStaticVoidMethod(signal_jvm_env, global_signal_cls, signal_method, signum);
+}
+
 /*
- * Class:     org_angproj_io_sig_Internals
- * Method:    get_signal_abbreviation
+ * Class:     _Included_org_angproj_io_sig_Internals
+ * Method:    sig_register
+ * Signature: (I)Z
+ */
+static jboolean sig_register(JNIEnv * env, jclass thisClass, jint signum) {
+    return (jboolean) (signal((int) signum, sig_handler) != SIG_ERR);
+}
+
+/*
+ * Class:     _Included_org_angproj_io_sig_Internals
+ * Method:    sig_count
+ * Signature: ()I
+ */
+static jint get_sig_count(JNIEnv * env, jclass thisClass) {
+    return (jint) sig_count();
+}
+
+/*
+ * Class:     _Included_org_angproj_io_sig_Internals
+ * Method:    sig_code
+ * Signature: (I)I
+ */
+static jint get_sig_code(JNIEnv * env, jclass thisClass, jint index) {
+    return (jint) sig_code((unsigned int) index);
+}
+
+/*
+ * Class:     _Included_org_angproj_io_sig_Internals
+ * Method:    sig_abbr
  * Signature: (I)Ljava/lang/String;
  */
-static jstring get_signal_abbreviation(JNIEnv *env, jclass thisClass, jint signum) {
-    char* abbr = signal_abbr(signum);
+static jstring get_sig_abbr(JNIEnv * env, jclass thisClass, jint index){
+    const char * abbr = sig_abbr((unsigned int) index);
     return (*env)->NewStringUTF(env, abbr);
 }
 
 static JNINativeMethod funcs[] = {
-	{ "signal_abbreviation", "(I)Ljava/lang/String;", (void *)&get_signal_abbreviation }
+    {"sig_register", "(I)Z", (void *) &sig_register},
+
+	{"sig_count", "()I", (void *) &get_sig_count},
+	{"sig_code", "(I)I", (void *) &get_sig_code},
+	{"sig_abbr", "(I)Ljava/lang/String;", (void *) &get_sig_abbr},
 };
 
 #define CURRENT_JNI JNI_VERSION_1_6
@@ -59,11 +104,25 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 	if (res != 0)
 		return -1;
 
+	// PREPARE STATIC START
+	signal_jvm_env = env;
+    local_signal_cls = (*signal_jvm_env)->FindClass(signal_jvm_env, "org/angproj/io/sig/Signal");
+    global_signal_cls = (*signal_jvm_env)->NewGlobalRef(signal_jvm_env, local_signal_cls);
+    signal_method = (*signal_jvm_env)->GetStaticMethodID(signal_jvm_env, global_signal_cls, "catchInterrupt", "(I)V");
+    // PREPARE STATIC OVER
+
 	return CURRENT_JNI;
 }
 
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved)
 {
+	// PREPARE STATIC START
+	signal_jvm_env = NULL;
+    local_signal_cls = NULL;
+    global_signal_cls = NULL;
+    signal_method = NULL;
+    // PREPARE STATIC OVER
+
 	JNIEnv *env;
 	jclass  cls;
 

@@ -25,60 +25,61 @@ package org.angproj.io.sig
  * @property sigName
  * @constructor Create empty Sig name
  */
-enum class SigName(val sigName: String){
-    SIGABRT("ABRT"), // Process abort signal
-    SIGALRM("ALRM"), // Alarm clock
-    SIGBUS("BUS"), // Access to an undefined portion of a memory object
-    SIGCHLD("CHLD"), // Child process terminated, stopped, or continued
-    SIGCONT("CONT"), // Continue executing, if stopped
-    SIGFPE("FPE"), // Erroneous arithmetic operation
-    SIGHUP("HUP"), // Hangup
-    SIGILL("ILL"), // Illegal instruction
-    SIGINT("INT"), // Terminal interrupt signal
-    SIGKILL("KILL"), // Kill (cannot be caught or ignored)
-    SIGPIPE("PIPE"), // Write on a pipe with no one to read it
-    SIGIO("IO"), // Pollable event
-    SIGPOLL("POLL"), // Pollable event
-    SIGPROF("PROF"), // Profiling timer expired
-    SIGQUIT("QUIT"), // Terminal quit signal
-    SIGSEGV("SEGV"), // Invalid memory reference
-    SIGSTOP("STOP"), // Stop executing (cannot be caught or ignored)
-    SIGSYS("SYS"), // Bad system call
-    SIGTERM("TERM"), // Termination signal
-    SIGTRAP("TRAP"), // Trace/breakpoint trap
-    SIGTSTP("TSTP"), // Terminal stop signal
-    SIGTTIN("TTIN"), // Background process attempting read
-    SIGTTOU("TTOU"), // Background process attempting write
-    SIGUSR1("USR1"), // User-defined signal 1
-    SIGUSR2("USR2"), // User-defined signal 2
-    SIGURG("URG"), // Out-of-band data is available at a socket
-    SIGVTALRM("VTALRM"), // Virtual timer expired
-    SIGXCPU("XCPU"), // CPU time limit exceeded
-    SIGXFSZ("XFSZ"), // File size limit exceeded
-    SIGWINCH("WINCH"), // Terminal window size changed
+enum class SigName(val sigName: String) {
+    SIGABRT("SIGABRT"),
+    SIGALRM("SIGALRM"),
+    SIGBUS("SIGBUS"),
+    SIGCHLD("SIGCHLD"),
+    SIGCONT("SIGCONT"),
+    SIGFPE("SIGFPE"),
+    SIGHUP("SIGHUP"),
+    SIGILL("SIGILL"),
+    SIGINT("SIGINT"),
+    SIGKILL("SIGKILL"),
+    SIGPIPE("SIGPIPE"),
+    SIGQUIT("SIGQUIT"),
+    SIGSEGV("SIGSEGV"),
+    SIGSTOP("SIGSTOP"),
+    SIGTERM("SIGTERM"),
+    SIGTSTP("SIGTSTP"),
+    SIGTTIN("SIGTTIN"),
+    SIGTTOU("SIGTTOU"),
+    SIGUSR1("SIGUSR1"),
+    SIGUSR2("SIGUSR2"),
+    SIGPOLL("SIGPOLL"),
+    SIGPROF("SIGPROF"),
+    SIGSYS("SIGSYS"),
+    SIGTRAP("SIGTRAP"),
+    SIGURG("SIGURG"),
+    SIGVTALRM("SIGVTALRM"),
+    SIGXCPU("SIGXCPU"),
+    SIGXFSZ("SIGXFSZ"),
 
 
-    UNKNOWN("UNKNOWN"); // Dummy for unauthorized use.
+    UNKNOWN("UNKNOWN");
 
     /**
      * SigName as a representable string.
      *
      * @return Full signal name
      */
-    override fun toString(): String = "SIG$sigName"
+    //override fun toString(): String = "SIG$sigName"
 
     companion object {
         private val numCache = mutableMapOf<Int, SigName>()
         private val nameCache = mutableMapOf<SigName, Int>()
 
         init {
-            for(num in 1..32) {
-                val abbr = Internals.sigAbbr(num)
-                try {
-                    val sig = valueOf("SIG$abbr")
-                    numCache[num] = sig
-                    nameCache[sig] = num
-                } catch (_: Exception) {}
+            for (num in 0..Internals.sigCount()) {
+                val code = Internals.sigCode(num)
+                if (code != 0 && !numCache.containsKey(code)) {
+                    try {
+                        val abbr = valueOf(Internals.sigAbbr(num))
+                        numCache[code] = abbr
+                        nameCache[abbr] = code
+                    } catch (_: Exception) {
+                    }
+                }
             }
         }
 
@@ -88,7 +89,8 @@ enum class SigName(val sigName: String){
          * @param sigNum Signal number
          * @return Signal name
          */
-        fun codeToName(sigNum: Int): SigName = numCache[sigNum] ?: throw SignalException("Unsupported signal number: $sigNum")
+        fun codeToName(sigNum: Int): SigName =
+            numCache[sigNum] ?: throw UnsupportedSignalException("Unsupported signal number: $sigNum")
 
         /**
          * Convert signal name to its equivalent signal number, throws SignalException if not supported.
@@ -96,7 +98,8 @@ enum class SigName(val sigName: String){
          * @param sigName Signal name
          * @return Signal number
          */
-        fun nameToCode(sigName: SigName): Int = nameCache[sigName] ?: throw SignalException("Unsupported signal: $sigName")
+        fun nameToCode(sigName: SigName): Int =
+            nameCache[sigName] ?: throw UnsupportedSignalException("Unsupported signal: $sigName")
 
         /**
          * Check if signal number is implemented.

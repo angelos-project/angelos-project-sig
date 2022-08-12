@@ -16,6 +16,10 @@
 #ifndef SRC_C_SIGNALS_H
 #define SRC_C_SIGNALS_H
 
-extern const char* signal_abbr(int signum);
+extern unsigned int sig_count();
+
+extern unsigned int sig_code(unsigned int index);
+
+extern const char * sig_abbr(unsigned int index);
 
 #endif //SRC_C_SIGNALS_H

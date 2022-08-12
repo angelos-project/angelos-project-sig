@@ -12,10 +12,13 @@
  * Contributors:
  *      Kristoffer Paulsson - initial implementation
  */
-rootProject.name = "angelos-project-sig"
+package org.angproj.io.sig
 
-include(":c-signals")
-include(":jni-signals")
-include(":signals")
-
-include(":jni-signals-test")
+/**
+ * Signal handler exception is thrown any time there is problem with signal handling.
+ *
+ * @constructor
+ *
+ * @param message Error message
+ */
+class SignalHandlerException(message: String) : RuntimeException(message)

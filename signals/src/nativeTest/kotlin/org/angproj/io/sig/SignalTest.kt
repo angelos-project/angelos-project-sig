@@ -16,19 +16,13 @@ import kotlin.test.assertTrue
  */
 actual class SignalTest {
 
-    /**
-     * Register handler test.
-     */
     @Test
     actual fun registerHandler() {
         val signal = SignalImpl()
         signal.registerHandler(SigName.SIGINT) { println("Hello signal $it") }
-        assertFailsWith<SignalException> { signal.registerHandler(SigName.SIGKILL) { println("Hello signal $it") } }
+        assertFailsWith<SignalHandlerException> { signal.registerHandler(SigName.SIGKILL) { println("Hello signal $it") } }
     }
 
-    /**
-     * Catch signal test.
-     */
     @Test
     actual fun catchInterrupt() {
         var received = false

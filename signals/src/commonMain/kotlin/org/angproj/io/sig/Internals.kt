@@ -17,6 +17,11 @@ package org.angproj.io.sig
 internal expect sealed class Internals {
     companion object {
         fun setInterrupt(sigName: SigName): Boolean
-        fun sigAbbr(sigNum: Int): String
+
+        fun sigCount(): Int
+
+        fun sigCode(index: Int): Int
+
+        fun sigAbbr(index: Int): String
     }
 }

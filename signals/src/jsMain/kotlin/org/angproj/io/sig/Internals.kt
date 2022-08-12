@@ -21,9 +21,10 @@ internal actual sealed class Internals {
             // TODO("Not yet implemented")
         }
 
-        actual fun sigAbbr(sigNum: Int): String {
-            return "FAKE"
-            // TODO("Not yet implemented")
-        }
+        actual fun sigCount(): Int = 0
+
+        actual fun sigCode(index: Int): Int = 0
+
+        actual fun sigAbbr(index: Int): String = ""
     }
 }

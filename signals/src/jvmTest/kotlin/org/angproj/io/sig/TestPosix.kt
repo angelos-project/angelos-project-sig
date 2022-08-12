@@ -15,10 +15,18 @@
 package org.angproj.io.sig
 
 /**
- * Signal exception is thrown any time there is problem with signals.
+ * Test class to access some POSIX functionality for testing only.
+ * Never use outside JVM testing of angelos-project-errno.
  *
- * @constructor
- *
- * @param message Error message
+ * @constructor Create empty Test
  */
-class SignalException(message: String) : RuntimeException(message)
+class TestPosix {
+    companion object {
+        init {
+            System.loadLibrary("jni-signals-test")
+        }
+
+        @JvmStatic
+        external fun test_raise(sig: Int): Int
+    }
+}

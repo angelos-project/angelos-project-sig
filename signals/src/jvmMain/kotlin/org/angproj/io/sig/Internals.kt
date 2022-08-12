@@ -14,7 +14,7 @@
  */
 package org.angproj.io.sig
 
-import sun.misc.Signal as SignalJVM
+//import sun.misc.Signal as SignalJVM
 
 internal actual sealed class Internals {
     actual companion object {
@@ -22,20 +22,26 @@ internal actual sealed class Internals {
             System.loadLibrary("jni-signals") // Load underlying library via JNI.
         }
 
-        actual fun setInterrupt(sigName: SigName): Boolean {
-            try {
-                SignalJVM.handle(SignalJVM(sigName.sigName)) {
-                    Signal.catchInterrupt(SigName.codeToName(it.number))
-                }
-            } catch (e: IllegalArgumentException) {
-                return false
-            }
-            return true
-        }
-
-        actual fun sigAbbr(sigNum: Int): String = signal_abbreviation(sigNum).uppercase()
+        @JvmStatic
+        private external fun sig_register(sigNum: Int): Boolean
 
         @JvmStatic
-        private external fun signal_abbreviation(sigNum: Int): String
+        private external fun sig_count(): Int
+
+        @JvmStatic
+        private external fun sig_code(index: Int): Int
+
+        @JvmStatic
+        private external fun sig_abbr(index: Int): String
+
+        actual fun sigCount(): Int = sig_count()
+
+        actual fun sigCode(index: Int): Int = sig_code(index)
+
+        actual fun sigAbbr(index: Int): String = sig_abbr(index)
+
+        actual fun setInterrupt(sigName: SigName): Boolean {
+            return sig_register(SigName.nameToCode(sigName))
+        }
     }
 }

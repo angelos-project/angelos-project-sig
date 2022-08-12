@@ -14,23 +14,28 @@
  */
 package org.angproj.io.sig
 
-import kotlinx.cinterop.*
+import csignals.sig_abbr
+import csignals.sig_code
+import csignals.sig_count
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.staticCFunction
+import kotlinx.cinterop.toKString
 import platform.posix.SIG_ERR
 import platform.posix.signal
-import csignals.signal_abbr
 
 internal actual sealed class Internals {
     actual companion object {
 
-        actual inline fun setInterrupt(sigName: SigName): Boolean = memScoped{
+        actual inline fun setInterrupt(sigName: SigName): Boolean = memScoped {
             signal(SigName.nameToCode(sigName), staticCFunction<Int, Unit> {
-                Signal.catchInterrupt(SigName.codeToName(it))
-                Unit
+                Signal.catchInterrupt(it)
             }) != SIG_ERR
         }
 
-        actual inline fun sigAbbr(sigNum: Int): String = memScoped {
-            signal_abbr(sigNum)!!.toKString().uppercase()
-        }
+        actual inline fun sigCount(): Int = sig_count().toInt()
+
+        actual inline fun sigCode(index: Int): Int = sig_code(index.toUInt()).toInt()
+
+        actual inline fun sigAbbr(index: Int): String = sig_abbr(index.toUInt())?.toKString() ?: ""
     }
 }

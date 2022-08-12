@@ -17,6 +17,7 @@ package org.angproj.io.sig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.jvm.JvmStatic
 
 /**
  * Signal interface, can be implemented on any object or class.
@@ -33,12 +34,13 @@ interface Signal {
      * @param action Lambda dealing with the incoming signal
      */
     fun registerHandler(sig: SigName, action: SignalHandler) {
-        when(Internals.setInterrupt(sig)) {
-            true -> when(sig in signals) {
+        when (Internals.setInterrupt(sig)) {
+            true -> when (sig in signals) {
                 true -> signals[sig]!!.add(action)
                 false -> signals[sig] = mutableListOf(action)
             }
-            false -> throw SignalException("Failed to install interrupt handler for $sig")
+
+            false -> throw SignalHandlerException("Failed to install interrupt handler for $sig")
         }
     }
 
@@ -46,6 +48,17 @@ interface Signal {
         private val scope = CoroutineScope(EmptyCoroutineContext)
         private val signals = mutableMapOf<SigName, MutableList<SignalHandler>>()
 
-        internal inline fun catchInterrupt(sigName: SigName) = signals[sigName]?.forEach { it -> scope.launch { it(sigName) } }
+        /**
+         * Is the callback to which POSIX is sending the signal.
+         * This function is strictly only to be used with catching signals,
+         * however misuse can lead to undefined behavior.
+         *
+         * @param sigNum The signal code to listen for.
+         */
+        @JvmStatic
+        fun catchInterrupt(sigNum: Int) {
+            val sigName = SigName.codeToName(sigNum)
+            signals[sigName]?.forEach { it -> scope.launch { it(sigName) } }
+        }
     }
 }

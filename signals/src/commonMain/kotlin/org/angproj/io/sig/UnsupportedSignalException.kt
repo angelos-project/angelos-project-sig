@@ -12,10 +12,13 @@
  * Contributors:
  *      Kristoffer Paulsson - initial implementation
  */
-rootProject.name = "angelos-project-sig"
+package org.angproj.io.sig
 
-include(":c-signals")
-include(":jni-signals")
-include(":signals")
-
-include(":jni-signals-test")
+/**
+ * Used to tell that the underlying POSIX implementation doesn't properly support a certain SIG*.
+ *
+ * @constructor
+ *
+ * @param message Message describing unsupported SIG*.
+ */
+class UnsupportedSignalException(message: String) : RuntimeException(message)
