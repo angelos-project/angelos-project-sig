@@ -18,7 +18,7 @@
 
 #include "c_signals.h"
 
-static unsigned int const count = 28;
+static unsigned int const count = 40;
 static char const * const names[] =
 {
 
@@ -186,6 +186,78 @@ static char const * const names[] =
 
     #ifdef SIGXFSZ
     "SIGXFSZ",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGIO
+    "SIGIO",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGIOT
+    "SIGIOT",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGRTMIN
+    "SIGRTMIN",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGRTMAX
+    "SIGRTMAX",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGWINCH
+    "SIGWINCH",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGEMT
+    "SIGEMT",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGINFO
+    "SIGINFO",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGPWR
+    "SIGPWR",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGLOST
+    "SIGLOST",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGSTKFLT
+    "SIGSTKFLT",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGUNUSED
+    "SIGUNUSED",
+    #else
+    NULL,
+    #endif
+
+    #ifdef SIGCLD
+    "SIGCLD",
     #else
     NULL,
     #endif
@@ -358,6 +430,78 @@ static unsigned int const codes[] =
 
     #ifdef SIGXFSZ
     SIGXFSZ,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGIO
+    SIGIO,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGIOT
+    SIGIOT,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGRTMIN
+    SIGRTMIN,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGRTMAX
+    SIGRTMAX,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGWINCH
+    SIGWINCH,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGEMT
+    SIGEMT,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGINFO
+    SIGINFO,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGPWR
+    SIGPWR,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGLOST
+    SIGLOST,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGSTKFLT
+    SIGSTKFLT,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGUNUSED
+    SIGUNUSED,
+    #else
+    0,
+    #endif
+
+    #ifdef SIGCLD
+    SIGCLD,
     #else
     0,
     #endif

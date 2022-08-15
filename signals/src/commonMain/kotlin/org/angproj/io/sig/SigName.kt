@@ -54,16 +54,19 @@ enum class SigName(val sigName: String) {
     SIGVTALRM("SIGVTALRM"),
     SIGXCPU("SIGXCPU"),
     SIGXFSZ("SIGXFSZ"),
-
-
+    SIGIO("SIGIO"),
+    SIGIOT("SIGIOT"),
+    SIGRTMIN("SIGRTMIN"),
+    SIGRTMAX("SIGRTMAX"),
+    SIGWINCH("SIGWINCH"),
+    SIGEMT("SIGEMT"),
+    SIGINFO("SIGINFO"),
+    SIGPWR("SIGPWR"),
+    SIGLOST("SIGLOST"),
+    SIGSTKFLT("SIGSTKFLT"),
+    SIGUNUSED("SIGUNUSED"),
+    SIGCLD("SIGCLD"),
     UNKNOWN("UNKNOWN");
-
-    /**
-     * SigName as a representable string.
-     *
-     * @return Full signal name
-     */
-    //override fun toString(): String = "SIG$sigName"
 
     companion object {
         private val numCache = mutableMapOf<Int, SigName>()
