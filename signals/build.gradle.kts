@@ -95,6 +95,7 @@ kotlin {
                         strictly(MetaProject.coroVersion)
                     }
                 }
+                implementation("org.angproj.io.err:angelos-project-errno:1.0.0")
             }
         }
         val commonTest by getting {

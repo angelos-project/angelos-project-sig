@@ -20,16 +20,17 @@ import csignals.sig_count
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.staticCFunction
 import kotlinx.cinterop.toKString
+import kotlinx.cinterop.toLong
 import platform.posix.SIG_ERR
 import platform.posix.signal
 
 internal actual sealed class Internals {
     actual companion object {
 
-        actual inline fun setInterrupt(sigName: SigName): Boolean = memScoped {
+        actual inline fun setInterrupt(sigName: SigName): Long = memScoped {
             signal(SigName.nameToCode(sigName), staticCFunction<Int, Unit> {
                 Signal.catchInterrupt(it)
-            }) != SIG_ERR
+            }).toLong()
         }
 
         actual inline fun sigCount(): Int = sig_count().toInt()
@@ -37,5 +38,7 @@ internal actual sealed class Internals {
         actual inline fun sigCode(index: Int): Int = sig_code(index.toUInt()).toInt()
 
         actual inline fun sigAbbr(index: Int): String = sig_abbr(index.toUInt())?.toKString() ?: ""
+
+        actual fun sigErr(): Long = SIG_ERR.toLong()
     }
 }

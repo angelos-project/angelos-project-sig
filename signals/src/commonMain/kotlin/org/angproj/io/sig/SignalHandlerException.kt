@@ -15,10 +15,10 @@
 package org.angproj.io.sig
 
 /**
- * Signal handler exception is thrown any time there is problem with signal handling.
+ * ignal handler exception is thrown any time there is problem with signal handling.
  *
  * @constructor
  *
- * @param message Error message
+ * @param cause Actual posix error.
  */
-class SignalHandlerException(message: String) : RuntimeException(message)
+class SignalHandlerException(cause: Throwable) : RuntimeException(cause)

@@ -16,8 +16,8 @@ package org.angproj.io.sig
 
 internal actual sealed class Internals {
     actual companion object {
-        actual fun setInterrupt(sigName: SigName): Boolean {
-            return false
+        actual fun setInterrupt(sigName: SigName): Long {
+            return 0
             // TODO("Not yet implemented")
         }
 
@@ -26,5 +26,7 @@ internal actual sealed class Internals {
         actual fun sigCode(index: Int): Int = 0
 
         actual fun sigAbbr(index: Int): String = ""
+
+        actual fun sigErr(): Long = -1
     }
 }

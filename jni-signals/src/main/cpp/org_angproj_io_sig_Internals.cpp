@@ -41,10 +41,10 @@ void sig_handler(int signum)
 /*
  * Class:     _Included_org_angproj_io_sig_Internals
  * Method:    sig_register
- * Signature: (I)Z
+ * Signature: (I)J
  */
-static jboolean sig_register(JNIEnv * env, jclass thisClass, jint signum) {
-    return (jboolean) (signal((int) signum, sig_handler) != SIG_ERR);
+static jlong sig_register(JNIEnv * env, jclass thisClass, jint signum) {
+    return (jlong) signal((int) signum, sig_handler);
 }
 
 /*
@@ -75,12 +75,22 @@ static jstring get_sig_abbr(JNIEnv * env, jclass thisClass, jint index){
     return (*env)->NewStringUTF(env, abbr);
 }
 
+/*
+ * Class:     _Included_org_angproj_io_sig_Internals
+ * Method:    sig_err
+ * Signature: ()J
+ */
+static jint get_sig_err(JNIEnv * env, jclass thisClass) {
+    return (jlong) SIG_ERR;
+}
+
 static JNINativeMethod funcs[] = {
-    {"sig_register", "(I)Z", (void *) &sig_register},
+    {"sig_register", "(I)J", (void *) &sig_register},
 
 	{"sig_count", "()I", (void *) &get_sig_count},
 	{"sig_code", "(I)I", (void *) &get_sig_code},
 	{"sig_abbr", "(I)Ljava/lang/String;", (void *) &get_sig_abbr},
+	{"sig_err", "()J", (void *) &get_sig_err}
 };
 
 #define CURRENT_JNI JNI_VERSION_1_6

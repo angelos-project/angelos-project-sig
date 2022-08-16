@@ -30,7 +30,7 @@ object MetaProject {
      *
      * Should be based on semantic versioning as described at https://semver.org
      */
-    const val version = "1.0.0-rc.1" //+ "-SNAPSHOT"
+    const val version = "1.0.0-rc.2" //+ "-SNAPSHOT"
 
     /**
      * Licence name and URL to original.
@@ -90,7 +90,7 @@ object MetaProject {
     /**
      * Project wide Kotlin version.
      */
-    const val kotlinVersion = "1.7.0" // "1.6.21"
+    const val kotlinVersion = "1.7.10" // "1.6.21"
     const val kotlinLibrary = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
 
     /**

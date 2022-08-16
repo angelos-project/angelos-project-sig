@@ -23,7 +23,7 @@ internal actual sealed class Internals {
         }
 
         @JvmStatic
-        private external fun sig_register(sigNum: Int): Boolean
+        private external fun sig_register(sigNum: Int): Long
 
         @JvmStatic
         private external fun sig_count(): Int
@@ -34,14 +34,19 @@ internal actual sealed class Internals {
         @JvmStatic
         private external fun sig_abbr(index: Int): String
 
+        @JvmStatic
+        private external fun sig_err(): Long
+
         actual fun sigCount(): Int = sig_count()
 
         actual fun sigCode(index: Int): Int = sig_code(index)
 
         actual fun sigAbbr(index: Int): String = sig_abbr(index)
 
-        actual fun setInterrupt(sigName: SigName): Boolean {
+        actual fun setInterrupt(sigName: SigName): Long {
             return sig_register(SigName.nameToCode(sigName))
         }
+
+        actual fun sigErr(): Long = sig_err()
     }
 }

@@ -18,7 +18,7 @@
 
 #include "c_signals.h"
 
-static unsigned int const count = 40;
+static unsigned int const count = 38;
 static char const * const names[] =
 {
 
@@ -198,18 +198,6 @@ static char const * const names[] =
 
     #ifdef SIGIOT
     "SIGIOT",
-    #else
-    NULL,
-    #endif
-
-    #ifdef SIGRTMIN
-    "SIGRTMIN",
-    #else
-    NULL,
-    #endif
-
-    #ifdef SIGRTMAX
-    "SIGRTMAX",
     #else
     NULL,
     #endif
@@ -442,18 +430,6 @@ static unsigned int const codes[] =
 
     #ifdef SIGIOT
     SIGIOT,
-    #else
-    0,
-    #endif
-
-    #ifdef SIGRTMIN
-    SIGRTMIN,
-    #else
-    0,
-    #endif
-
-    #ifdef SIGRTMAX
-    SIGRTMAX,
     #else
     0,
     #endif

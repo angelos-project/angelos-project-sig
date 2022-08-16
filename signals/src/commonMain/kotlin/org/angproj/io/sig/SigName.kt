@@ -56,8 +56,6 @@ enum class SigName(val sigName: String) {
     SIGXFSZ("SIGXFSZ"),
     SIGIO("SIGIO"),
     SIGIOT("SIGIOT"),
-    SIGRTMIN("SIGRTMIN"),
-    SIGRTMAX("SIGRTMAX"),
     SIGWINCH("SIGWINCH"),
     SIGEMT("SIGEMT"),
     SIGINFO("SIGINFO"),

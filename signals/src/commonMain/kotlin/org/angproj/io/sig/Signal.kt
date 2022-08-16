@@ -16,6 +16,7 @@ package org.angproj.io.sig
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.angproj.io.err.AbstractError
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.jvm.JvmStatic
 
@@ -35,18 +36,23 @@ interface Signal {
      */
     fun registerHandler(sig: SigName, action: SignalHandler) {
         when (Internals.setInterrupt(sig)) {
-            true -> when (sig in signals) {
-                true -> signals[sig]!!.add(action)
-                false -> signals[sig] = mutableListOf(action)
-            }
+            SIG_ERR -> throw SignalHandlerException(
+                AbstractError.error("Installing signal handler for $sig")
+            )
 
-            false -> throw SignalHandlerException("Failed to install interrupt handler for $sig")
+            else -> {
+                when (sig in signals) {
+                    true -> signals[sig]!!.add(action)
+                    false -> signals[sig] = mutableListOf(action)
+                }
+            }
         }
     }
 
     companion object {
         private val scope = CoroutineScope(EmptyCoroutineContext)
         private val signals = mutableMapOf<SigName, MutableList<SignalHandler>>()
+        private val SIG_ERR = Internals.sigErr()
 
         /**
          * Is the callback to which POSIX is sending the signal.
